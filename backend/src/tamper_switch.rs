@@ -32,7 +32,7 @@ fn detect_event(tamper_rx: &LineHandle) -> Result<Event, gpio_cdev::Error> {
     Ok(result)
 }
 
-// The Cuprux target target
+// The Cuprux target
 #[cfg(target_os = "linux")]
 pub async fn task(
     event_tx: broadcast::Sender<Event>,

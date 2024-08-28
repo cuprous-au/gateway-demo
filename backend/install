@@ -1,0 +1,50 @@
+#!/bin/sh
+# Installs/upgrades the matt:e controller. Previous configuration is retained.
+# Copyright (C) 2023-2024 matt:e
+
+BIN_PATH=/bin
+GATEWAY_CONFIG_PATH=/etc/gateway-configurator
+LIB_PATH=/lib/gateway-demo
+INITD_PATH=/etc/init.d
+SYSTEMD_PATH=/etc/systemd
+
+# Pre-checks
+
+if [ ! -f "$GATEWAY_CONFIG_PATH/gateway-configurator.conf" ]; then
+  echo "Please install the configurator first"
+  exit 1
+fi
+
+# Stop any existing gateway service
+
+echo "Stopping any existing backend service"
+systemctl disable --now systemd-nspawn@gateway-demo 2> /dev/null || true
+
+# Ensure our paths exist
+
+mkdir -p $BIN_PATH
+mkdir -p $LIB_PATH
+
+# Remove existing files that are likely to be retained between releases
+
+if [ -f "$LIB_PATH/index.html" ]; then
+  echo "Cleaning up old files..."
+  rm $LIB_PATH/*
+fi
+
+# Copy files to the root file system
+
+echo "Copying files... this may take several seconds"
+rsync -arK \
+  --exclude=install \
+  --exclude=etc/systemd/system/systemd-nspawn@gateway-demo.service.d \
+  * \
+  /usr/lib/gateway-demo/
+rsync -arK \
+  etc/systemd/system/systemd-nspawn@gateway-demo.service.d/* \
+  /etc/systemd/system/systemd-nspawn@gateway-demo.service.d
+
+# Enable and start the service
+
+echo "Starting the gateway service given a new container"
+systemctl enable --now systemd-nspawn@gateway-demo

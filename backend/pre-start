@@ -1,0 +1,5 @@
+#/bin/sh
+# Pre startup script for the container
+
+mkdir -p /var/run/container
+chmod 700 /var/run/container

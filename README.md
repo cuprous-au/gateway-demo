@@ -28,3 +28,18 @@ brew install arm-linux-gnueabihf-binutils
 ```
 cargo build --bin gateway-demo --release --target=armv7-unknown-linux-musleabihf
 ```
+
+The next step is to build the frontend in release form:
+
+```
+trunk build --release
+```
+
+With all binaries built, we can now package:
+
+```
+sudo ./package-build-artefacts-linux.sh
+```
+
+This package will be built as a tar.gz file and the script will output its location. The archive
+can be copied on to a gateway, decompressed and then its `install` script run.
