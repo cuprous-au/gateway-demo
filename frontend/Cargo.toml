@@ -12,4 +12,6 @@ categories = ["gui", "wasm", "web-programming"]
 [dependencies]
 futures = { workspace = true }
 gloo-net = { workspace = true }
+gloo-timers = { workspace = true }
+js-sys = { workspace = true }
 yew = { workspace = true, features = ["csr"] }
