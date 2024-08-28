@@ -3,6 +3,7 @@ resolver = "2"
 
 members = [
     "backend",
+    "frontend",
 ]
 
 [workspace.dependencies]
@@ -13,3 +14,4 @@ gpio-cdev = "0.6.0"
 log = "0.4.22"
 tokio = "1.39.3"
 tokio-stream = "0.1.14"
+yew = "0.20"

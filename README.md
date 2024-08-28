@@ -11,7 +11,7 @@ gateway's tamper switch being opened/closed.
 Releasing for Linux armv7 (The Cuprous Secured Edge Gateway with Cuprux)
 ---
 
-Assuming a hardware floating point target (`hf`), install the toolchain (Linux):
+Install the toolchain (Linux):
 
 ```
 apt-get install gcc-arm-linux-musleabihf
@@ -25,14 +25,18 @@ brew install arm-linux-gnueabihf-binutils
 
 ...and then build:
 
+> If not already done, install the Rust target: `rustup target add armv7-unknown-linux-musleabihf`.
+
 ```
 cargo build --bin gateway-demo --release --target=armv7-unknown-linux-musleabihf
 ```
 
 The next step is to build the frontend in release form:
 
+> If not already done, following the instructions for WASM here: https://yew.rs/docs/getting-started/introduction
+
 ```
-trunk build --release
+(cd frontend && trunk build --release)
 ```
 
 With all binaries built, we can now package:

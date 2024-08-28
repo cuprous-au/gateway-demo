@@ -7,64 +7,72 @@ echo
 echo "Using PUBLISH_VERSION: $PUBLISH_VERSION for TARGET: $TARGET"
 echo
 
-mkdir /tmp/gateway-demo-packaging
+mkdir /tmp/gateway-demo
 
-cp backend/install /tmp/gateway-demo-packaging
-chown 0:0 /tmp/gateway-demo-packaging/install
-chmod 700 /tmp/gateway-demo-packaging/install
+cp backend/install /tmp/gateway-demo
+chown 0:0 /tmp/gateway-demo/install
+chmod 700 /tmp/gateway-demo/install
 
-mkdir /tmp/gateway-demo-packaging/bin
-chown 0:0 /tmp/gateway-demo-packaging/bin
-chmod 755 /tmp/gateway-demo-packaging/bin
+mkdir /tmp/gateway-demo/bin
+chown 0:0 /tmp/gateway-demo/bin
+chmod 755 /tmp/gateway-demo/bin
 
-cp target/$TARGET/release/gateway-demo /tmp/gateway-demo-packaging/bin
-chown 0:0 /tmp/gateway-demo-packaging/bin/gateway-demo
-chmod 700 /tmp/gateway-demo-packaging/bin/gateway-demo
+cp target/$TARGET/release/gateway-demo /tmp/gateway-demo/bin
+chown 0:0 /tmp/gateway-demo/bin/gateway-demo
+chmod 700 /tmp/gateway-demo/bin/gateway-demo
 
-mkdir /tmp/gateway-demo-packaging/etc
-chown 0:0 /tmp/gateway-demo-packaging/etc
-chmod 755 /tmp/gateway-demo-packaging/etc
+mkdir /tmp/gateway-demo/etc
+chown 0:0 /tmp/gateway-demo/etc
+chmod 755 /tmp/gateway-demo/etc
 
-mkdir /tmp/gateway-demo-packaging/etc/systemd
-chown 0:0 /tmp/gateway-demo-packaging/etc/systemd
-chmod 755 /tmp/gateway-demo-packaging/etc/systemd
+mkdir /tmp/gateway-demo/etc/systemd
+chown 0:0 /tmp/gateway-demo/etc/systemd
+chmod 755 /tmp/gateway-demo/etc/systemd
 
-mkdir /tmp/gateway-demo-packaging/etc/systemd/system
-chown 0:0 /tmp/gateway-demo-packaging/etc/systemd/system
-chmod 755 /tmp/gateway-demo-packaging/etc/systemd/system
+mkdir /tmp/gateway-demo/etc/systemd/system
+chown 0:0 /tmp/gateway-demo/etc/systemd/system
+chmod 755 /tmp/gateway-demo/etc/systemd/system
 
-mkdir /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
-chown 0:0 /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
-chmod 755 /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
+mkdir /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
+chown 0:0 /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
+chmod 755 /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
 
-cp backend/override.conf /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
-chown 0:0 /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d/override.conf
-chmod 644 /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d/override.conf
+cp backend/override.conf /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
+chown 0:0 /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d/override.conf
+chmod 644 /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d/override.conf
 
-cp backend/pre-start /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
-chown 0:0 /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d/pre-start
-chmod 700 /tmp/gateway-demo-packaging/etc/systemd/system/systemd-nspawn@gateway-demo.service.d/pre-start
+cp backend/pre-start /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d
+chown 0:0 /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d/pre-start
+chmod 700 /tmp/gateway-demo/etc/systemd/system/systemd-nspawn@gateway-demo.service.d/pre-start
 
-mkdir /tmp/gateway-demo-packaging/lib
-chown 0:0 /tmp/gateway-demo-packaging/lib
-chmod 755 /tmp/gateway-demo-packaging/lib
+mkdir /tmp/gateway-demo/lib
+chown 0:0 /tmp/gateway-demo/lib
+chmod 755 /tmp/gateway-demo/lib
 
-mkdir /tmp/gateway-demo-packaging/lib/gateway-demo
-chown 0:0 /tmp/gateway-demo-packaging/lib/gateway-demo
-chmod 600 /tmp/gateway-demo-packaging/lib/gateway-demo
+mkdir /tmp/gateway-demo/lib/gateway-demo
+chown 0:0 /tmp/gateway-demo/lib/gateway-demo
+chmod 600 /tmp/gateway-demo/lib/gateway-demo
 
 gzip --best frontend/dist/*
 for file in frontend/dist/*
 do
-  mv "$file".gz "$file"
+  mv "$file".gz "$file" 2> /dev/null || true
 done
-cp -r frontend/dist/* /tmp/gateway-demo-packaging/lib/gateway-demo
-chown 0:0 /tmp/gateway-demo-packaging/lib/gateway-demo/*
-chmod 600 /tmp/gateway-demo-packaging/lib/gateway-demo/*
+cp -r frontend/dist/* /tmp/gateway-demo/lib/gateway-demo
+chown 0:0 /tmp/gateway-demo/lib/gateway-demo/*
+chmod 600 /tmp/gateway-demo/lib/gateway-demo/*
 
-tar -czvf "/tmp/gateway-demo-$TARGET.v$PUBLISH_VERSION.tar.gz" /tmp/gateway-demo-packaging
+mkdir /tmp/gateway-demo/usr
+chown 0:0 /tmp/gateway-demo/usr
+chmod 755 /tmp/gateway-demo/usr
 
-rm -rf /tmp/gateway-demo-packaging
+mkdir /tmp/gateway-demo/usr/bin
+chown 0:0 /tmp/gateway-demo/usr/bin
+chmod 755 /tmp/gateway-demo/usr/bin
+
+tar -czvf "/tmp/gateway-demo-$TARGET.v$PUBLISH_VERSION.tar.gz" -C /tmp gateway-demo
+
+rm -rf /tmp/gateway-demo
 
 echo
 echo "/tmp/gateway-demo-$TARGET.v$PUBLISH_VERSION.tar.gz created"
