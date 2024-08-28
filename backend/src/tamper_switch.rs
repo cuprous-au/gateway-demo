@@ -19,7 +19,7 @@ impl Display for Event {
     }
 }
 
-const SAMPLING_DELAY: Duration = Duration::from_secs(1);
+const SAMPLING_DELAY: Duration = Duration::from_millis(100);
 
 #[cfg(target_os = "linux")]
 fn detect_event(tamper_rx: &LineHandle) -> Result<Event, gpio_cdev::Error> {
@@ -74,7 +74,7 @@ pub async fn task(
     let mut count = 0u32;
 
     loop {
-        tokio::time::sleep(SAMPLING_DELAY).await;
+        tokio::time::sleep(SAMPLING_DELAY * 10).await;
 
         if event_tx
             .send(if count % 2 == 0 {
