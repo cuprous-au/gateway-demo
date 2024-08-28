@@ -2,24 +2,38 @@ html,
 body {
   height: 100%;
   margin: 0;
+  font-family: poppins-semibold, sans-serif;
 }
 
 body {
   align-items: center;
+  color: white;
   display: flex;
+  flex-direction: column;
   justify-content: center;
 
-  background: linear-gradient(to bottom right, #444444, #009a5b);
+  background: linear-gradient(to bottom right, #007481, black);
   font-size: 1.5rem;
-}
-
-main {
-  color: #fff6d5;
-  font-family: sans-serif;
   text-align: center;
 }
 
-h1+.subtitle {
-  display: block;
-  margin-top: -1em;
+header {
+  margin-top: 10em;
+  position: absolute;
+  top: 0;
+}
+
+main {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+footer {
+  margin-bottom: 2em;
+  position: absolute;
+  bottom: 0;
+}
+
+a {
+  color: white;
 }

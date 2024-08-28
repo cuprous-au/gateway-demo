@@ -55,9 +55,22 @@ impl Component for App {
         };
 
         html! {
+            <>
+            <header>
+                <img src="cuprous_logo_master_cmyk.svg" alt="Cuprous logo" /><br />
+                <h1>{"Secured Edge Gateway"}</h1>
+            </header>
             <main>
-                <h1>{ format!("Tamper state: {tamper_state}") }</h1>
+                <p>{ format!("Tamper state: {tamper_state}") }</p>
             </main>
+            <footer>
+                <small>
+                    {"© Copyright "}
+                    <a href="https://www.cuprous.com.au">{"Cuprous P/L"}</a>
+                    {", 2024 "}
+                </small>
+            </footer>
+            </>
         }
     }
 }
