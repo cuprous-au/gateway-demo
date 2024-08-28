@@ -18,7 +18,7 @@ struct Args {
 
     /// A socket address for serving our web service requests.
     /// Defaults to the local interface.
-    #[clap(env, long, default_value = "127.0.0.1:8080")]
+    #[clap(env, long, default_value = "127.0.0.1:8081")]
     http_addr: SocketAddr,
 
     /// The GPIO chip to use that hosts the rx tamper switch pin
