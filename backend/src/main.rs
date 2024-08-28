@@ -12,6 +12,10 @@ mod tamper_switch;
 #[derive(Parser, Debug)]
 #[clap(author, about, long_about = None, version)]
 struct Args {
+    /// The path to the SPA assets
+    #[clap(env, long, default_value = "/lib/gateway-demo")]
+    assets_path: PathBuf,
+
     /// A socket address for serving our web service requests.
     /// Defaults to the local interface.
     #[clap(env, long, default_value = "127.0.0.1:8080")]
@@ -47,7 +51,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let http_addr = args.http_addr;
     let http_server_task = tokio::spawn(async move {
-        let routes = http_server::routes(tamper_event_tx);
+        let routes = http_server::routes(&args.assets_path, tamper_event_tx);
         let listener = tokio::net::TcpListener::bind(http_addr).await?;
         info!("HTTP listening on {}", args.http_addr);
         let r = axum::serve(listener, routes).await;

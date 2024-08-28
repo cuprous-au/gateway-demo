@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use axum::{
     extract::State,
     response::{sse, IntoResponse, Sse},
@@ -6,6 +8,7 @@ use axum::{
 };
 use tokio::sync::broadcast;
 use tokio_stream::{wrappers::BroadcastStream, StreamExt};
+use tower_http::services::ServeDir;
 
 use crate::tamper_switch;
 
@@ -16,11 +19,16 @@ struct RouteState {
     tamper_event_tx: broadcast::Sender<tamper_switch::Event>,
 }
 
-pub fn routes(tamper_event_tx: broadcast::Sender<tamper_switch::Event>) -> Router {
+pub fn routes(
+    assets_path: &Path,
+    tamper_event_tx: broadcast::Sender<tamper_switch::Event>,
+) -> Router {
     let routes = Router::new()
         .route("/events", get(get_gateway_events))
         .with_state(RouteState { tamper_event_tx });
-    Router::new().nest("/api/v1", routes)
+    Router::new()
+        .nest("/api/v1", routes)
+        .nest_service("/", ServeDir::new(assets_path).precompressed_gzip())
 }
 
 async fn get_gateway_events(State(route_state): State<RouteState>) -> impl IntoResponse {
